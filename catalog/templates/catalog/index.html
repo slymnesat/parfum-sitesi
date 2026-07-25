@@ -62,7 +62,7 @@
         line-height: 1.8;
     }
 
-    /* Mobil Uyumluluk (Responsive) - Hero */
+    /* Tablet/Mobil Uyumluluk - Hero */
     @media (max-width: 992px) {
         .hero-container {
             flex-direction: column;
@@ -213,46 +213,65 @@
         border-color: #222;
     }
 
-    /* Mobil Ekranlar İçin 3'lü Grid ve Kart Optimizasyonları */
+    /* Telefon Ekranları İçin 3'lü Grid ve Ölçekleme Ayarları */
     @media (max-width: 768px) {
+        .hero-section {
+            padding: 40px 0 30px !important;
+        }
+        .hero-text-content h1 {
+            font-size: 2rem !important;
+            margin-bottom: 10px !important;
+        }
+        .hero-desc {
+            font-size: 0.9rem !important;
+            padding: 0 10px;
+        }
+        .whatsapp-info-badge {
+            padding: 10px 15px !important;
+            margin-top: 20px !important;
+        }
+        .whatsapp-info-text {
+            font-size: 0.8rem !important;
+        }
+
+        /* 3 Sütunlu Ürün Izgarası (Grid) */
         .product-grid {
             grid-template-columns: repeat(3, 1fr) !important;
-            gap: 8px !important;
-            padding: 10px 4px !important;
+            gap: 6px !important;
+            padding: 8px 4px !important;
         }
         .card-img-top {
-            height: 110px !important;
+            height: 105px !important;
         }
         .card-body {
-            padding: 8px !important;
+            padding: 6px !important;
         }
         .card-title {
-            font-size: 0.75rem !important;
-            letter-spacing: 0.5px !important;
+            font-size: 0.7rem !important;
+            letter-spacing: 0px !important;
             margin-bottom: 4px !important;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
-        /* Mobilde 3 sütunda yer kazanmak için uzun açıklamayı gizleyip fiyat ve butonu küçültüyoruz */
         .card-text {
             display: none; 
         }
         .card-body small {
-            font-size: 0.6rem !important;
-            letter-spacing: 1px !important;
+            font-size: 0.55rem !important;
+            letter-spacing: 0.5px !important;
         }
         .card-body h4 {
-            font-size: 0.95rem !important;
+            font-size: 0.85rem !important;
             margin-bottom: 6px !important;
         }
         .btn-gold {
-            font-size: 0.55rem !important;
-            padding: 4px 2px !important;
-            letter-spacing: 0.5px !important;
+            font-size: 0.5rem !important;
+            padding: 3px 2px !important;
+            letter-spacing: 0px !important;
         }
         .btn-gold i {
-            display: none; /* Mobilde ikonu gizleyerek yerden tasarruf sağlar */
+            display: none;
         }
     }
 </style>
@@ -272,12 +291,10 @@
         <div class="hero-text-content">
             <h1>Maison de Parfum</h1>
             
-            <!-- İlham Verici Parfüm Yazısı -->
             <p class="hero-desc">
                 Koku, hafızanın en zarif anahtarıdır. Ruhunuzu yansıtan ve ardınızda silinmez bir iz bırakan o eşsiz imzayı, özenle seçilmiş Santalfragrance koleksiyonunda keşfedin.
             </p>
             
-            <!-- Butik Hizmet / WhatsApp Bilgilendirmesi -->
             <div class="whatsapp-info-badge">
                 <i class="fab fa-whatsapp"></i>
                 <p class="whatsapp-info-text">
@@ -327,7 +344,6 @@
                 <img src="{{ perfume.image.url }}" class="card-img-top" alt="{{ perfume.name }}">
                 {% endif %}
                 <div class="card-body d-flex flex-column text-center p-4">
-                    <!-- Kategori Etiketi -->
                     {% if perfume.category %}
                     <small class="text-uppercase mb-2" style="font-size: 0.75rem; letter-spacing: 2px; color: var(--gold);">{{ perfume.category.name }}</small>
                     {% endif %}
@@ -344,7 +360,7 @@
                 </div>
             </div>
             {% empty %}
-            <div class="col-12 text-center mt-5 grid-column-span-all" style="grid-column: 1 / -1;">
+            <div class="col-12 text-center mt-5" style="grid-column: 1 / -1;">
                 <p class="text-muted fs-5"><i class="fas fa-box-open me-2"></i>Bu kategoride henüz ürün bulunmamaktadır.</p>
             </div>
             {% endfor %}
@@ -355,7 +371,6 @@
         <nav aria-label="Sayfa Navigasyonu" class="mt-5">
             <ul class="pagination justify-content-center">
                 
-                <!-- Önceki Sayfa -->
                 {% if perfumes.has_previous %}
                     <li class="page-item">
                         <a class="page-link" href="?page={{ perfumes.previous_page_number }}{% if active_category %}&category={{ active_category }}{% endif %}">&laquo; Önceki</a>
@@ -366,7 +381,6 @@
                     </li>
                 {% endif %}
 
-                <!-- Sayfa Numaraları -->
                 {% for num in perfumes.paginator.page_range %}
                     {% if perfumes.number == num %}
                         <li class="page-item active"><span class="page-link">{{ num }}</span></li>
@@ -375,7 +389,6 @@
                     {% endif %}
                 {% endfor %}
 
-                <!-- Sonraki Sayfa -->
                 {% if perfumes.has_next %}
                     <li class="page-item">
                         <a class="page-link" href="?page={{ perfumes.next_page_number }}{% if active_category %}&category={{ active_category }}{% endif %}">Sonraki &raquo;</a>

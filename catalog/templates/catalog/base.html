@@ -40,7 +40,7 @@
             font-family: 'Cormorant Garamond', serif;
         }
         
-        /* Navbar ve Büyütülmüş Logo Stili */
+        /* Navbar ve Logo Stili */
         .navbar {
             background-color: #ffffff;
             padding: 16px 0;
@@ -51,6 +51,7 @@
             display: flex;
             align-items: center;
             text-decoration: none;
+            overflow: hidden;
         }
         .navbar-logo {
             height: 75px; 
@@ -67,74 +68,21 @@
             letter-spacing: 2px;
             font-weight: 600;
             margin: 0;
+            white-space: nowrap;
         }
 
-        /* 3 Sütunlu Ürün Izgarası (Grid) ve Mobil Uyum */
-        .product-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 24px;
-            padding: 20px 0;
-        }
-
-        /* Mobil Ekranlar İçin Özel Düzenlemeler (768px ve altı) */
+        /* Mobilde Navbar ve Başlık Optimizasyonu */
         @media (max-width: 768px) {
             .navbar {
-                padding: 10px 0;
+                padding: 8px 0;
             }
             .navbar-logo {
-                height: 50px;
-                margin-right: 8px;
+                height: 38px !important;
+                margin-right: 6px !important;
             }
             .brand-title {
-                font-size: 1.3rem;
-                letter-spacing: 1px;
-            }
-            
-            /* Mobilde 3 sütunlu yapı ve sıkıştırılmış zarif görünüm */
-            .product-grid {
-                grid-template-columns: repeat(3, 1fr) !important;
-                gap: 6px !important;
-                padding: 8px 4px !important;
-            }
-
-            /* Ürün kartı içi mobil daraltmalar */
-            .card {
-                margin-bottom: 0 !important;
-            }
-            .card-body {
-                padding: 6px !important;
-            }
-            .card-title {
-                font-size: 0.75rem !important;
-                line-height: 1.1;
-                margin-bottom: 4px !important;
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-            }
-            .card-text, .text-muted.small {
-                font-size: 0.65rem !important;
-                display: -webkit-box;
-                -webkit-line-clamp: 2;
-                -webkit-box-orient: vertical;
-                overflow: hidden;
-                margin-bottom: 4px !important;
-            }
-            /* Ürün görseli yüksekliği */
-            .product-img-container img, .card img {
-                height: 110px !important;
-                object-fit: cover;
-            }
-            /* Fiyat ve Buton boyutları */
-            .price-tag, .product-price {
-                font-size: 0.75rem !important;
-                font-weight: bold;
-            }
-            .btn-add-cart, .card .btn {
-                font-size: 0.6rem !important;
-                padding: 3px 2px !important;
-                letter-spacing: 0px !important;
+                font-size: 1rem !important;
+                letter-spacing: 0.5px !important;
             }
         }
 
