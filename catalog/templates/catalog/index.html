@@ -62,7 +62,7 @@
         line-height: 1.8;
     }
 
-    /* Mobil Uyumluluk (Responsive) */
+    /* Mobil Uyumluluk (Responsive) - Hero */
     @media (max-width: 992px) {
         .hero-container {
             flex-direction: column;
@@ -71,8 +71,11 @@
             max-width: 280px;
         }
         .hero-text-content {
-            order: -1; /* Mobilde yazıyı üste alır */
+            order: -1; 
             margin-bottom: 40px;
+        }
+        .hero-text-content h1 {
+            font-size: 2.8rem;
         }
     }
 
@@ -118,6 +121,14 @@
         background-color: var(--dark-bg);
         padding: 80px 0;
         width: 100%;
+    }
+
+    /* 3 Sütunlu Ürün Izgarası (Grid) */
+    .product-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 24px;
+        padding: 20px 0;
     }
 
     /* Ürün Kartları */
@@ -201,6 +212,49 @@
         color: #555;
         border-color: #222;
     }
+
+    /* Mobil Ekranlar İçin 3'lü Grid ve Kart Optimizasyonları */
+    @media (max-width: 768px) {
+        .product-grid {
+            grid-template-columns: repeat(3, 1fr) !important;
+            gap: 8px !important;
+            padding: 10px 4px !important;
+        }
+        .card-img-top {
+            height: 110px !important;
+        }
+        .card-body {
+            padding: 8px !important;
+        }
+        .card-title {
+            font-size: 0.75rem !important;
+            letter-spacing: 0.5px !important;
+            margin-bottom: 4px !important;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        /* Mobilde 3 sütunda yer kazanmak için uzun açıklamayı gizleyip fiyat ve butonu küçültüyoruz */
+        .card-text {
+            display: none; 
+        }
+        .card-body small {
+            font-size: 0.6rem !important;
+            letter-spacing: 1px !important;
+        }
+        .card-body h4 {
+            font-size: 0.95rem !important;
+            margin-bottom: 6px !important;
+        }
+        .btn-gold {
+            font-size: 0.55rem !important;
+            padding: 4px 2px !important;
+            letter-spacing: 0.5px !important;
+        }
+        .btn-gold i {
+            display: none; /* Mobilde ikonu gizleyerek yerden tasarruf sağlar */
+        }
+    }
 </style>
 {% endblock %}
 
@@ -265,34 +319,32 @@
             </ul>
         </div>
         
-        <!-- Ürün Kartları Row -->
-        <div class="row justify-content-center">
+        <!-- Ürün Kartları Grid (3 Sütunlu) -->
+        <div class="product-grid">
             {% for perfume in perfumes %}
-            <div class="col-md-6 col-lg-4 mb-5">
-                <div class="card h-100 rounded-0 overflow-hidden shadow-sm">
-                    {% if perfume.image %}
-                    <img src="{{ perfume.image.url }}" class="card-img-top" alt="{{ perfume.name }}">
+            <div class="card h-100 rounded-0 overflow-hidden shadow-sm">
+                {% if perfume.image %}
+                <img src="{{ perfume.image.url }}" class="card-img-top" alt="{{ perfume.name }}">
+                {% endif %}
+                <div class="card-body d-flex flex-column text-center p-4">
+                    <!-- Kategori Etiketi -->
+                    {% if perfume.category %}
+                    <small class="text-uppercase mb-2" style="font-size: 0.75rem; letter-spacing: 2px; color: var(--gold);">{{ perfume.category.name }}</small>
                     {% endif %}
-                    <div class="card-body d-flex flex-column text-center p-4">
-                        <!-- Kategori Etiketi -->
-                        {% if perfume.category %}
-                        <small class="text-uppercase mb-2" style="font-size: 0.75rem; letter-spacing: 2px; color: var(--gold);">{{ perfume.category.name }}</small>
-                        {% endif %}
-                        
-                        <h5 class="card-title fw-bold text-uppercase mb-3" style="font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; letter-spacing: 1px; color: #ffffff;">{{ perfume.name }}</h5>
-                        <p class="card-text small mb-4" style="line-height: 1.6; color: #9a9a9a;">{{ perfume.description|truncatechars:120 }}</p>
-                        
-                        <h4 class="mt-auto mb-4" style="color: var(--gold); font-family: 'Cormorant Garamond', serif; font-size: 1.9rem; font-weight: 700;">{{ perfume.price }} TL</h4>
-                        
-                        <button onclick="addToCart({{ perfume.id }}, '{{ perfume.name|escapejs }}', '{{ perfume.price }}')"
-                                class="btn btn-gold w-100 py-3 fw-bold text-uppercase rounded-0">
-                            <i class="fas fa-cart-plus me-2"></i>Sepete Ekle
-                        </button>
-                    </div>
+                    
+                    <h5 class="card-title fw-bold text-uppercase mb-3" style="font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; letter-spacing: 1px; color: #ffffff;">{{ perfume.name }}</h5>
+                    <p class="card-text small mb-4" style="line-height: 1.6; color: #9a9a9a;">{{ perfume.description|truncatechars:120 }}</p>
+                    
+                    <h4 class="mt-auto mb-4" style="color: var(--gold); font-family: 'Cormorant Garamond', serif; font-size: 1.9rem; font-weight: 700;">{{ perfume.price }} TL</h4>
+                    
+                    <button onclick="addToCart({{ perfume.id }}, '{{ perfume.name|escapejs }}', '{{ perfume.price }}')"
+                            class="btn btn-gold w-100 py-3 fw-bold text-uppercase rounded-0">
+                        <i class="fas fa-cart-plus me-2"></i>Sepete Ekle
+                    </button>
                 </div>
             </div>
             {% empty %}
-            <div class="col-12 text-center mt-5">
+            <div class="col-12 text-center mt-5 grid-column-span-all" style="grid-column: 1 / -1;">
                 <p class="text-muted fs-5"><i class="fas fa-box-open me-2"></i>Bu kategoride henüz ürün bulunmamaktadır.</p>
             </div>
             {% endfor %}

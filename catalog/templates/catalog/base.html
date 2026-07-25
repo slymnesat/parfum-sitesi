@@ -31,6 +31,7 @@
             flex-direction: column;
             min-height: 100vh;
             letter-spacing: 0.5px;
+            overflow-x: hidden;
         }
         main {
             flex: 1;
@@ -52,20 +53,89 @@
             text-decoration: none;
         }
         .navbar-logo {
-            height: 95px; /* Logoyu daha belirgin ve büyük hale getirdik */
+            height: 75px; 
             width: auto;
             object-fit: contain;
-            margin-right: 18px;
+            margin-right: 12px;
             border: none !important;
             box-shadow: none !important;
             background: transparent !important;
         }
         .brand-title {
             color: var(--dark-bg);
-            font-size: 2.3rem;
-            letter-spacing: 3px;
+            font-size: 2rem;
+            letter-spacing: 2px;
             font-weight: 600;
             margin: 0;
+        }
+
+        /* 3 Sütunlu Ürün Izgarası (Grid) ve Mobil Uyum */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            padding: 20px 0;
+        }
+
+        /* Mobil Ekranlar İçin Özel Düzenlemeler (768px ve altı) */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 10px 0;
+            }
+            .navbar-logo {
+                height: 50px;
+                margin-right: 8px;
+            }
+            .brand-title {
+                font-size: 1.3rem;
+                letter-spacing: 1px;
+            }
+            
+            /* Mobilde 3 sütunlu yapı ve sıkıştırılmış zarif görünüm */
+            .product-grid {
+                grid-template-columns: repeat(3, 1fr) !important;
+                gap: 6px !important;
+                padding: 8px 4px !important;
+            }
+
+            /* Ürün kartı içi mobil daraltmalar */
+            .card {
+                margin-bottom: 0 !important;
+            }
+            .card-body {
+                padding: 6px !important;
+            }
+            .card-title {
+                font-size: 0.75rem !important;
+                line-height: 1.1;
+                margin-bottom: 4px !important;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+            .card-text, .text-muted.small {
+                font-size: 0.65rem !important;
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+                margin-bottom: 4px !important;
+            }
+            /* Ürün görseli yüksekliği */
+            .product-img-container img, .card img {
+                height: 110px !important;
+                object-fit: cover;
+            }
+            /* Fiyat ve Buton boyutları */
+            .price-tag, .product-price {
+                font-size: 0.75rem !important;
+                font-weight: bold;
+            }
+            .btn-add-cart, .card .btn {
+                font-size: 0.6rem !important;
+                padding: 3px 2px !important;
+                letter-spacing: 0px !important;
+            }
         }
 
         /* Footer */
@@ -79,17 +149,17 @@
         /* Yüzen Sepet Butonu */
         .floating-cart {
             position: fixed;
-            bottom: 35px;
-            right: 35px;
-            width: 70px;
-            height: 70px;
+            bottom: 30px;
+            right: 30px;
+            width: 65px;
+            height: 65px;
             background-color: var(--gold);
             color: white;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 26px;
+            font-size: 24px;
             box-shadow: 0 6px 20px rgba(181, 149, 92, 0.4);
             cursor: pointer;
             z-index: 1000;
@@ -142,12 +212,10 @@
 </main>
 
 <!-- Footer -->
-<!-- Footer -->
 <footer>
     <div class="container text-center">
         <h4 class="mb-3" style="color: var(--gold); font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; letter-spacing: 2px;">SANTALFRAGRANCE</h4>
         
-        <!-- text-muted kaldırıldı, okunaklı gri renk (#b0b0b0) verildi -->
         <p class="small mb-1" style="color: #b0b0b0;">
             © <a href="{% url 'admin:index' %}" style="color: inherit; text-decoration: none; cursor: default;">2026</a> Santal Maison de Parfum. Tüm hakları saklıdır.
         </p>
