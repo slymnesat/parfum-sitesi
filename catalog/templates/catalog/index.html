@@ -1,0 +1,343 @@
+{% extends 'catalog/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<style>
+    /* Karşılama Alanı (Hero) Dış Kapsayıcı */
+    .hero-section {
+        background-color: var(--light-bg);
+        padding: 80px 0 60px;
+    }
+
+    /* Flexbox Hero Düzeni */
+    .hero-container {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        max-width: 1300px;
+        margin: 0 auto;
+        padding: 0 20px;
+        gap: 40px;
+    }
+
+    .hero-image-wrapper {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+    }
+
+    .hero-image {
+        width: 100%;
+        max-width: 320px;
+        border-radius: 15px;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        transition: transform 0.4s ease;
+    }
+
+    .hero-image:hover {
+        transform: translateY(-10px);
+    }
+
+    .hero-text-content {
+        flex: 1.5;
+        text-align: center;
+    }
+
+    /* Hero Tipografi */
+    .hero-text-content h1 {
+        color: var(--gold-dark);
+        font-size: 4.2rem;
+        margin-bottom: 15px;
+        letter-spacing: 3px;
+        font-weight: 600;
+    }
+    
+    .hero-text-content p.hero-desc {
+        letter-spacing: 1px;
+        color: #6c5f51; 
+        font-size: 1.15rem;
+        font-weight: 400;
+        max-width: 750px;
+        margin: 0 auto;
+        line-height: 1.8;
+    }
+
+    /* Mobil Uyumluluk (Responsive) */
+    @media (max-width: 992px) {
+        .hero-container {
+            flex-direction: column;
+        }
+        .hero-image {
+            max-width: 280px;
+        }
+        .hero-text-content {
+            order: -1; /* Mobilde yazıyı üste alır */
+            margin-bottom: 40px;
+        }
+    }
+
+    /* WhatsApp Bilgilendirme Rozeti */
+    .whatsapp-info-badge {
+        display: inline-flex;
+        align-items: center;
+        text-align: left;
+        background-color: rgba(181, 149, 92, 0.08);
+        border: 1px solid rgba(181, 149, 92, 0.4);
+        padding: 14px 28px;
+        border-radius: 50px;
+        margin-top: 35px;
+        transition: all 0.3s ease;
+    }
+    
+    .whatsapp-info-badge:hover {
+        background-color: rgba(181, 149, 92, 0.15);
+        border-color: var(--gold);
+    }
+
+    .whatsapp-info-badge i {
+        font-size: 1.8rem;
+        color: #25D366; 
+        margin-right: 15px;
+    }
+
+    .whatsapp-info-text {
+        color: var(--dark-bg);
+        font-size: 0.95rem;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+        margin: 0;
+    }
+    
+    .whatsapp-info-text strong {
+        color: var(--gold-dark);
+        font-weight: 700;
+    }
+
+    /* Koleksiyon Dış Kapsayıcı */
+    .collection-wrapper {
+        background-color: var(--dark-bg);
+        padding: 80px 0;
+        width: 100%;
+    }
+
+    /* Ürün Kartları */
+    .card {
+        background-color: #1c1c1c;
+        border: 1px solid #2a2a2a;
+        transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        color: #fcfbf9;
+    }
+    .card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7);
+        border-color: var(--gold);
+    }
+    .card-img-top {
+        height: 360px;
+        object-fit: cover;
+        border-bottom: 2px solid rgba(181, 149, 92, 0.3); 
+    }
+
+    /* Butonlar ve Tipografi */
+    .btn-gold {
+        background-color: transparent;
+        color: var(--gold);
+        border: 1px solid var(--gold);
+        transition: all 0.3s ease;
+        letter-spacing: 1.5px;
+        font-size: 0.85rem;
+    }
+    .btn-gold:hover {
+        background-color: var(--gold);
+        color: #121212;
+    }
+
+    /* Kategori Filtre Butonları */
+    .nav-pills .nav-link {
+        color: #b0b0b0;
+        border: 1px solid #333;
+        background-color: transparent;
+        border-radius: 30px;
+        padding: 10px 28px;
+        font-weight: 400;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        transition: all 0.3s ease;
+    }
+    .nav-pills .nav-link:hover {
+        border-color: var(--gold);
+        color: var(--gold);
+    }
+    .nav-pills .nav-link.active {
+        background-color: var(--gold) !important;
+        color: #121212 !important;
+        border-color: var(--gold) !important;
+        font-weight: 600;
+    }
+
+    /* Sayfalama (Pagination) Özelleştirmesi */
+    .pagination .page-link {
+        background-color: #1c1c1c;
+        border-color: #333;
+        color: #b0b0b0;
+        transition: all 0.3s;
+        margin: 0 3px;
+        border-radius: 5px;
+    }
+    .pagination .page-link:hover {
+        background-color: #2a2a2a;
+        color: var(--gold);
+        border-color: var(--gold);
+    }
+    .pagination .page-item.active .page-link {
+        background-color: var(--gold);
+        border-color: var(--gold);
+        color: #121212;
+        font-weight: bold;
+    }
+    .pagination .page-item.disabled .page-link {
+        background-color: #121212;
+        color: #555;
+        border-color: #222;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="hero-section">
+    <div class="hero-container">
+        
+        <!-- Sol Görsel -->
+        <div class="hero-image-wrapper">
+            <img src="{% static 'img/parfum1.png' %}" alt="Santal Koleksiyonu" class="hero-image">
+        </div>
+
+        <!-- Orta Metin -->
+        <div class="hero-text-content">
+            <h1>Maison de Parfum</h1>
+            
+            <!-- İlham Verici Parfüm Yazısı -->
+            <p class="hero-desc">
+                Koku, hafızanın en zarif anahtarıdır. Ruhunuzu yansıtan ve ardınızda silinmez bir iz bırakan o eşsiz imzayı, özenle seçilmiş Santalfragrance koleksiyonunda keşfedin.
+            </p>
+            
+            <!-- Butik Hizmet / WhatsApp Bilgilendirmesi -->
+            <div class="whatsapp-info-badge">
+                <i class="fab fa-whatsapp"></i>
+                <p class="whatsapp-info-text">
+                    Size özel, butik bir alışveriş deneyimi sunabilmek adına tüm siparişlerimiz <strong>WhatsApp</strong> üzerinden kişisel asistanınız aracılığıyla alınmaktadır.
+                </p>
+            </div>
+        </div>
+
+        <!-- Sağ Görsel -->
+        <div class="hero-image-wrapper">
+            <img src="{% static 'img/parfum2.png' %}" alt="Santal Koleksiyonu" class="hero-image">
+        </div>
+
+    </div>
+</div>
+
+<!-- Ürün Vitrini -->
+<div class="collection-wrapper">
+    <div class="container">
+        <h2 class="text-center mb-5 fw-bold" style="color: #ffffff; font-family: 'Cormorant Garamond', serif; font-size: 2.8rem; letter-spacing: 2px;">Koleksiyonumuz</h2>
+        
+        <!-- Kategori Filtreleme Menüsü -->
+        <div class="d-flex justify-content-center mb-5">
+            <ul class="nav nav-pills gap-3 justify-content-center">
+                <li class="nav-item">
+                    <a class="nav-link {% if not active_category %}active{% endif %}"
+                        href="{% url 'perfume_list' %}">
+                        Tümü
+                    </a>
+                </li>
+                {% for category in categories %}
+                <li class="nav-item">
+                    <a class="nav-link {% if active_category == category.slug %}active{% endif %}"
+                        href="?category={{ category.slug }}">
+                        {{ category.name }}
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        
+        <!-- Ürün Kartları Row -->
+        <div class="row justify-content-center">
+            {% for perfume in perfumes %}
+            <div class="col-md-6 col-lg-4 mb-5">
+                <div class="card h-100 rounded-0 overflow-hidden shadow-sm">
+                    {% if perfume.image %}
+                    <img src="{{ perfume.image.url }}" class="card-img-top" alt="{{ perfume.name }}">
+                    {% endif %}
+                    <div class="card-body d-flex flex-column text-center p-4">
+                        <!-- Kategori Etiketi -->
+                        {% if perfume.category %}
+                        <small class="text-uppercase mb-2" style="font-size: 0.75rem; letter-spacing: 2px; color: var(--gold);">{{ perfume.category.name }}</small>
+                        {% endif %}
+                        
+                        <h5 class="card-title fw-bold text-uppercase mb-3" style="font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; letter-spacing: 1px; color: #ffffff;">{{ perfume.name }}</h5>
+                        <p class="card-text small mb-4" style="line-height: 1.6; color: #9a9a9a;">{{ perfume.description|truncatechars:120 }}</p>
+                        
+                        <h4 class="mt-auto mb-4" style="color: var(--gold); font-family: 'Cormorant Garamond', serif; font-size: 1.9rem; font-weight: 700;">{{ perfume.price }} TL</h4>
+                        
+                        <button onclick="addToCart({{ perfume.id }}, '{{ perfume.name|escapejs }}', '{{ perfume.price }}')"
+                                class="btn btn-gold w-100 py-3 fw-bold text-uppercase rounded-0">
+                            <i class="fas fa-cart-plus me-2"></i>Sepete Ekle
+                        </button>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center mt-5">
+                <p class="text-muted fs-5"><i class="fas fa-box-open me-2"></i>Bu kategoride henüz ürün bulunmamaktadır.</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Sayfalama (Pagination) -->
+        {% if perfumes.has_other_pages %}
+        <nav aria-label="Sayfa Navigasyonu" class="mt-5">
+            <ul class="pagination justify-content-center">
+                
+                <!-- Önceki Sayfa -->
+                {% if perfumes.has_previous %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ perfumes.previous_page_number }}{% if active_category %}&category={{ active_category }}{% endif %}">&laquo; Önceki</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link">&laquo; Önceki</span>
+                    </li>
+                {% endif %}
+
+                <!-- Sayfa Numaraları -->
+                {% for num in perfumes.paginator.page_range %}
+                    {% if perfumes.number == num %}
+                        <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                    {% elif num > perfumes.number|add:'-3' and num < perfumes.number|add:'3' %}
+                        <li class="page-item"><a class="page-link" href="?page={{ num }}{% if active_category %}&category={{ active_category }}{% endif %}">{{ num }}</a></li>
+                    {% endif %}
+                {% endfor %}
+
+                <!-- Sonraki Sayfa -->
+                {% if perfumes.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ perfumes.next_page_number }}{% if active_category %}&category={{ active_category }}{% endif %}">Sonraki &raquo;</a>
+                    </li>
+                {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link">Sonraki &raquo;</span>
+                    </li>
+                {% endif %}
+                
+            </ul>
+        </nav>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}

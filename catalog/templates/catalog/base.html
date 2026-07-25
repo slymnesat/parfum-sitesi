@@ -1,0 +1,310 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Santalfragrance | Maison de Parfum{% endblock %}</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    
+    <style>
+        :root {
+            --gold: #b5955c;
+            --gold-dark: #937341;
+            --dark-bg: #1a1a1a;
+            --light-bg: #fcfbf9;
+            --text-main: #2c2c2c;
+        }
+        body {
+            background-color: var(--light-bg);
+            font-family: 'Montserrat', sans-serif;
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            letter-spacing: 0.5px;
+        }
+        main {
+            flex: 1;
+        }
+        h1, h2, h3, h4, h5, .brand-title {
+            font-family: 'Cormorant Garamond', serif;
+        }
+        
+        /* Navbar ve Büyütülmüş Logo Stili */
+        .navbar {
+            background-color: #ffffff;
+            padding: 16px 0;
+            border-bottom: 2px solid var(--gold);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+        }
+        .brand-container {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+        .navbar-logo {
+            height: 95px; /* Logoyu daha belirgin ve büyük hale getirdik */
+            width: auto;
+            object-fit: contain;
+            margin-right: 18px;
+            border: none !important;
+            box-shadow: none !important;
+            background: transparent !important;
+        }
+        .brand-title {
+            color: var(--dark-bg);
+            font-size: 2.3rem;
+            letter-spacing: 3px;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark-bg);
+            color: #d1d1d1;
+            padding: 50px 0 25px;
+            border-top: 3px solid var(--gold);
+        }
+
+        /* Yüzen Sepet Butonu */
+        .floating-cart {
+            position: fixed;
+            bottom: 35px;
+            right: 35px;
+            width: 70px;
+            height: 70px;
+            background-color: var(--gold);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            box-shadow: 0 6px 20px rgba(181, 149, 92, 0.4);
+            cursor: pointer;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        .floating-cart:hover {
+            transform: scale(1.08);
+            background-color: var(--gold-dark);
+        }
+
+        /* Sepet Adet Butonları */
+        .quantity-btn {
+            background-color: #f4f1ea;
+            border: 1px solid #dcd6cd;
+            color: var(--dark-bg);
+            width: 30px;
+            height: 30px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .quantity-btn:hover {
+            background-color: var(--gold);
+            color: white;
+            border-color: var(--gold);
+        }
+        
+        {% block extra_css %}{% endblock %}
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg sticky-top">
+    <div class="container d-flex justify-content-center">
+        <a class="brand-container" href="/">
+            <img src="{% static 'logo.png' %}" alt="Santal Logo" class="navbar-logo">
+            <span class="brand-title">SANTALFRAGRANCE</span>
+        </a>
+    </div>
+</nav>
+
+<!-- Dinamik İçerik -->
+<main>
+    {% block content %}
+    {% endblock %}
+</main>
+
+<!-- Footer -->
+<!-- Footer -->
+<footer>
+    <div class="container text-center">
+        <h4 class="mb-3" style="color: var(--gold); font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; letter-spacing: 2px;">SANTALFRAGRANCE</h4>
+        
+        <!-- text-muted kaldırıldı, okunaklı gri renk (#b0b0b0) verildi -->
+        <p class="small mb-1" style="color: #b0b0b0;">
+            © <a href="{% url 'admin:index' %}" style="color: inherit; text-decoration: none; cursor: default;">2026</a> Santal Maison de Parfum. Tüm hakları saklıdır.
+        </p>
+        
+        <p class="small" style="color: #b0b0b0;">
+            Özel siparişleriniz WhatsApp hattımız üzerinden güvenle işleme alınmaktadır.
+        </p>
+    </div>
+</footer>
+
+<!-- Yüzen Sepet Butonu -->
+<div class="floating-cart" data-bs-toggle="modal" data-bs-target="#cartModal">
+    <i class="fas fa-shopping-bag"></i>
+    <span id="cart-badge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-dark" style="font-size: 13px; border: 2px solid var(--gold); padding: 6px 9px;">
+        0
+    </span>
+</div>
+
+<!-- Sepet Modalı -->
+<div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content rounded-0 border-0 shadow-lg">
+            <div class="modal-header" style="background-color: var(--dark-bg); color: var(--gold); border-bottom: 2px solid var(--gold); padding: 20px 25px;">
+                <h5 class="modal-title fw-bold" id="cartModalLabel" style="font-family: 'Cormorant Garamond', serif; font-size: 1.5rem; letter-spacing: 1px;"><i class="fas fa-shopping-cart me-2"></i>Alışveriş Çantanız</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Kapat"></button>
+            </div>
+            <div class="modal-body p-4" id="cart-items-container">
+                <p class="text-muted text-center my-4">Çantanız şu an boş.</p>
+            </div>
+            <div class="modal-footer d-flex justify-content-between align-items-center bg-light border-top p-4">
+                <div>
+                    <span class="text-muted small d-block text-uppercase" style="letter-spacing: 1px;">Genel Toplam</span>
+                    <h5 class="fw-bold m-0" style="color: var(--dark-bg); font-family: 'Cormorant Garamond', serif; font-size: 1.5rem;"><span id="cart-total" style="color: var(--gold);">0.00</span> TL</h5>
+                </div>
+                <button type="button" class="btn btn-dark px-4 py-3 rounded-0 fw-bold text-uppercase" style="background-color: var(--dark-bg); border: 1px solid var(--gold); letter-spacing: 1px; font-size: 0.85rem;" onclick="sendToWhatsApp()">
+                    <i class="fab fa-whatsapp me-2 text-success fs-5 align-middle"></i>Siparişi Tamamla
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    let cart = [];
+    const phoneNumber = "905333761137"; 
+
+    const Toast = Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
+        background: '#1a1a1a',
+        color: '#b5955c'
+    });
+
+    function addToCart(id, name, priceStr) {
+        let price = parseFloat(priceStr.replace(',', '.'));
+        let existingItem = cart.find(item => item.id === id);
+        
+        if (existingItem) {
+            existingItem.qty += 1;
+        } else {
+            cart.push({ id: id, name: name, price: price, qty: 1 });
+        }
+        updateCartUI();
+
+        Toast.fire({
+            icon: 'success',
+            title: `${name} sepete eklendi!`
+        });
+    }
+
+    function updateQuantity(index, change) {
+        cart[index].qty += change;
+        if (cart[index].qty <= 0) {
+            cart.splice(index, 1);
+        }
+        updateCartUI();
+    }
+
+    function updateCartUI() {
+        const container = document.getElementById('cart-items-container');
+        const badge = document.getElementById('cart-badge');
+        const totalEl = document.getElementById('cart-total');
+        
+        let total = 0;
+        let totalQty = 0;
+        
+        if (cart.length === 0) {
+            container.innerHTML = '<div class="text-center py-5"><i class="fas fa-shopping-bag fa-3x text-muted mb-3 opacity-50"></i><p class="text-muted">Çantanız şu an boş.</p></div>';
+            badge.innerText = "0";
+            totalEl.innerText = "0.00";
+            return;
+        }
+
+        let html = '<div class="list-group list-group-flush">';
+        cart.forEach((item, index) => {
+            let itemTotal = item.price * item.qty;
+            total += itemTotal;
+            totalQty += item.qty;
+            
+            html += `
+                <div class="list-group-item px-0 py-3 d-flex justify-content-between align-items-center bg-transparent">
+                    <div class="pe-2">
+                        <h6 class="my-0 fw-bold text-uppercase" style="font-size: 0.95rem; color: #1a1a1a; letter-spacing: 0.5px;">${item.name}</h6>
+                        <small class="text-muted">${item.price.toFixed(2)} TL / Adet</small>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <div class="input-group input-group-sm me-3" style="width: 105px;">
+                            <button class="quantity-btn" onclick="updateQuantity(${index}, -1)">-</button>
+                            <input type="text" class="form-control text-center bg-white border-secondary-subtle px-0 shadow-none" value="${item.qty}" readonly style="font-size: 13px; font-weight: 600;">
+                            <button class="quantity-btn" onclick="updateQuantity(${index}, 1)">+</button>
+                        </div>
+                        <span style="color: var(--gold); font-weight: 600; min-width: 85px; text-align: right; font-size: 0.95rem;">${itemTotal.toFixed(2)} TL</span>
+                    </div>
+                </div>
+            `;
+        });
+        html += '</div>';
+        
+        container.innerHTML = html;
+        badge.innerText = totalQty;
+        totalEl.innerText = total.toFixed(2);
+    }
+
+    sendToWhatsApp = function() {
+        if (cart.length === 0) {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Çantanız Boş',
+                text: 'Lütfen sipariş vermeden önce çantanıza ürün ekleyin.',
+                confirmButtonColor: '#b5955c',
+                background: '#fcfbf9'
+            });
+            return;
+        }
+
+        let text = "*SANTALFRAGRANCE - YENİ SİPARİŞ*\n\nMerhaba, aşağıdaki ürünleri satın almak istiyorum:\n\n*Sipariş Detayı:*\n";
+        let total = 0;
+
+        cart.forEach(item => {
+            let itemTotal = item.price * item.qty;
+            text += `- ${item.qty} adet *${item.name}* : ${itemTotal.toFixed(2)} TL\n`;
+            total += itemTotal;
+        });
+
+        text += `\n========================\n*GENEL TOPLAM: ${total.toFixed(2)} TL*\n========================\n\nSiparişimi onaylamak için dönüşünüzü bekliyorum.`;
+
+        let encodedText = encodeURIComponent(text);
+        window.open(`https://wa.me/${phoneNumber}?text=${encodedText}`, '_blank');
+    }
+</script>
+
+{% block extra_js %}{% endblock %}
+
+</body>
+</html>
