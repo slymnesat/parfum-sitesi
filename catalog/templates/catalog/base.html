@@ -183,6 +183,32 @@
             color: white;
             border-color: var(--gold);
         }
+
+        /* --- YÖNTEM 2: KAYDIRILABİLİR (SCROLL) AÇIKLAMA ALANI STİLLERİ --- */
+        .scrollable-desc {
+            max-height: 80px; 
+            overflow-y: auto; 
+            padding-right: 5px;
+            text-align: center;
+        }
+        .scrollable-desc::-webkit-scrollbar {
+            width: 4px;
+        }
+        .scrollable-desc::-webkit-scrollbar-track {
+            background: transparent; 
+        }
+        .scrollable-desc::-webkit-scrollbar-thumb {
+            background: var(--gold-dark); 
+            border-radius: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .scrollable-desc {
+                max-height: 60px;
+                font-size: 0.75rem !important;
+                display: block !important;
+            }
+        }
         
         {% block extra_css %}{% endblock %}
     </style>

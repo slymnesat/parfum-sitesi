@@ -62,23 +62,6 @@
         line-height: 1.8;
     }
 
-    /* Tablet/Mobil Uyumluluk - Hero */
-    @media (max-width: 992px) {
-        .hero-container {
-            flex-direction: column;
-        }
-        .hero-image {
-            max-width: 280px;
-        }
-        .hero-text-content {
-            order: -1; 
-            margin-bottom: 40px;
-        }
-        .hero-text-content h1 {
-            font-size: 2.8rem;
-        }
-    }
-
     /* WhatsApp Bilgilendirme Rozeti */
     .whatsapp-info-badge {
         display: inline-flex;
@@ -121,50 +104,6 @@
         background-color: var(--dark-bg);
         padding: 80px 0;
         width: 100%;
-    }
-
-    /* --- YENİ EKLENEN ARAMA ÇUBUĞU STİLLERİ --- */
-    .search-container {
-        max-width: 600px;
-        margin: 0 auto 40px auto;
-        padding: 0 20px;
-    }
-    .search-form {
-        display: flex;
-        position: relative;
-        background: #1c1c1c;
-        border-radius: 50px;
-        border: 1px solid #333;
-        overflow: hidden;
-        transition: all 0.3s ease;
-    }
-    .search-form:focus-within {
-        border-color: var(--gold);
-        box-shadow: 0 0 15px rgba(181, 149, 92, 0.15);
-    }
-    .search-input {
-        flex: 1;
-        padding: 15px 25px;
-        background: transparent;
-        border: none;
-        color: #fcfbf9;
-        font-size: 1rem;
-        outline: none;
-    }
-    .search-input::placeholder {
-        color: #777;
-    }
-    .search-button {
-        background-color: transparent;
-        color: var(--gold);
-        border: none;
-        padding: 0 25px;
-        font-size: 1.2rem;
-        cursor: pointer;
-        transition: all 0.3s ease;
-    }
-    .search-button:hover {
-        color: #fff;
     }
 
     /* 3 Sütunlu Ürün Izgarası (Grid) */
@@ -257,7 +196,24 @@
         border-color: #222;
     }
 
-    /* Telefon Ekranları İçin 3'lü Grid ve Ölçekleme Ayarları */
+    /* --- TABLET VE MOBİL UYUMLULUK --- */
+    @media (max-width: 992px) {
+        .hero-container {
+            flex-direction: column;
+        }
+        .hero-image {
+            max-width: 280px;
+        }
+        .hero-text-content {
+            order: -1; 
+            margin-bottom: 40px;
+        }
+        .hero-text-content h1 {
+            font-size: 2.8rem;
+        }
+    }
+
+    /* Telefon Ekranları İçin MOBİL 2'Lİ SÜTUN Ayarları */
     @media (max-width: 768px) {
         .hero-section {
             padding: 40px 0 30px !important;
@@ -277,53 +233,41 @@
         .whatsapp-info-text {
             font-size: 0.8rem !important;
         }
-        
-        .search-container {
-            padding: 0 10px;
-        }
-        .search-input {
-            padding: 10px 15px;
-            font-size: 0.9rem;
-        }
 
-        /* 3 Sütunlu Ürün Izgarası (Grid) */
+        /* MOBİLDE YAN YANA 2 ÜRÜN */
         .product-grid {
-            grid-template-columns: repeat(3, 1fr) !important;
-            gap: 6px !important;
-            padding: 8px 4px !important;
+            grid-template-columns: repeat(2, 1fr) !important;
+            gap: 12px !important;
+            padding: 10px 5px !important;
         }
         .card-img-top {
-            height: 105px !important;
+            height: 160px !important;
         }
         .card-body {
-            padding: 6px !important;
+            padding: 12px !important;
         }
         .card-title {
-            font-size: 0.7rem !important;
+            font-size: 0.85rem !important;
             letter-spacing: 0px !important;
-            margin-bottom: 4px !important;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        .card-text {
-            display: none; 
+            margin-bottom: 6px !important;
+            white-space: normal;
         }
         .card-body small {
-            font-size: 0.55rem !important;
-            letter-spacing: 0.5px !important;
+            font-size: 0.65rem !important;
+            letter-spacing: 1px !important;
         }
         .card-body h4 {
-            font-size: 0.85rem !important;
-            margin-bottom: 6px !important;
+            font-size: 1.1rem !important;
+            margin-bottom: 10px !important;
         }
         .btn-gold {
-            font-size: 0.5rem !important;
-            padding: 3px 2px !important;
-            letter-spacing: 0px !important;
+            font-size: 0.75rem !important;
+            padding: 6px 4px !important;
+            letter-spacing: 0.5px !important;
         }
         .btn-gold i {
-            display: none;
+            display: inline-block !important; /* Sepet ikonunu mobilde geri getirdik */
+            font-size: 0.8rem;
         }
     }
 </style>
@@ -366,31 +310,17 @@
 <!-- Ürün Vitrini -->
 <div class="collection-wrapper">
     <div class="container">
-        <h2 class="text-center mb-4 fw-bold" style="color: #ffffff; font-family: 'Cormorant Garamond', serif; font-size: 2.8rem; letter-spacing: 2px;">Koleksiyonumuz</h2>
+        <h2 class="text-center mb-5 fw-bold" style="color: #ffffff; font-family: 'Cormorant Garamond', serif; font-size: 2.8rem; letter-spacing: 2px;">Koleksiyonumuz</h2>
         
-        <!-- YENİ EKLENEN ARAMA ALANI -->
-        <div class="search-container">
-            <form action="{% url 'perfume_list' %}" method="GET" class="search-form">
-                <input type="text" name="q" placeholder="Parfüm adı, marka veya nota (örn: vanilya)..." 
-                       value="{{ request.GET.q }}" class="search-input">
-                <!-- Eğer aktif bir kategori varsa, arama yaparken kategoriyi kaybetmemek için gizli input -->
-                {% if active_category %}
-                <input type="hidden" name="category" value="{{ active_category }}">
-                {% endif %}
-                <button type="submit" class="search-button" aria-label="Ara">
-                    <i class="fas fa-search"></i>
-                </button>
-            </form>
-            
-            <!-- Arama sonuç uyarısı -->
-            {% if request.GET.q %}
-            <p class="text-center mt-3" style="color: var(--gold); font-size: 1.1rem;">
+        <!-- Arama Sonuç Uyarısı (Eğer arama yapıldıysa) -->
+        {% if request.GET.q %}
+        <div class="text-center mb-4">
+            <p style="color: var(--gold); font-size: 1.1rem;">
                 "<strong>{{ request.GET.q }}</strong>" için arama sonuçları gösteriliyor.
                 <a href="{% url 'perfume_list' %}{% if active_category %}?category={{ active_category }}{% endif %}" class="text-decoration-none ms-2" style="color: #b0b0b0; font-size: 0.9rem;">(Aramayı Temizle)</a>
             </p>
-            {% endif %}
         </div>
-        <!-- ARAMA ALANI BİTİŞİ -->
+        {% endif %}
 
         <!-- Kategori Filtreleme Menüsü -->
         <div class="d-flex justify-content-center mb-5">
@@ -412,7 +342,7 @@
             </ul>
         </div>
         
-        <!-- Ürün Kartları Grid (3 Sütunlu) -->
+        <!-- Ürün Kartları Grid -->
         <div class="product-grid">
             {% for perfume in perfumes %}
             <div class="card h-100 rounded-0 overflow-hidden shadow-sm">
@@ -425,7 +355,9 @@
                     {% endif %}
                     
                     <h5 class="card-title fw-bold text-uppercase mb-3" style="font-family: 'Cormorant Garamond', serif; font-size: 1.6rem; letter-spacing: 1px; color: #ffffff;">{{ perfume.name }}</h5>
-                    <p class="card-text small mb-4" style="line-height: 1.6; color: #9a9a9a;">{{ perfume.description|truncatechars:120 }}</p>
+                    
+                    <!-- YÖNTEM 2: KAYDIRILABİLİR ALAN VE PARLAK YAZI RENGİ EKLENDİ (TRUNCATE SİLİNDİ) -->
+                    <p class="card-text small mb-4 scrollable-desc" style="line-height: 1.6; color: #dcdcdc;">{{ perfume.description }}</p>
                     
                     <h4 class="mt-auto mb-4" style="color: var(--gold); font-family: 'Cormorant Garamond', serif; font-size: 1.9rem; font-weight: 700;">{{ perfume.price }} TL</h4>
                     
@@ -437,7 +369,7 @@
             </div>
             {% empty %}
             <div class="col-12 text-center mt-5" style="grid-column: 1 / -1;">
-                <p class="text-muted fs-5"><i class="fas fa-search me-2"></i>Arama kriterlerinize uygun parfüm bulunamadı.</p>
+                <p class="text-muted fs-5"><i class="fas fa-box-open me-2"></i>Arama kriterlerinize veya bu kategoriye uygun parfüm bulunamadı.</p>
             </div>
             {% endfor %}
         </div>
