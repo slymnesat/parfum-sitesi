@@ -123,6 +123,50 @@
         width: 100%;
     }
 
+    /* --- YENİ EKLENEN ARAMA ÇUBUĞU STİLLERİ --- */
+    .search-container {
+        max-width: 600px;
+        margin: 0 auto 40px auto;
+        padding: 0 20px;
+    }
+    .search-form {
+        display: flex;
+        position: relative;
+        background: #1c1c1c;
+        border-radius: 50px;
+        border: 1px solid #333;
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+    .search-form:focus-within {
+        border-color: var(--gold);
+        box-shadow: 0 0 15px rgba(181, 149, 92, 0.15);
+    }
+    .search-input {
+        flex: 1;
+        padding: 15px 25px;
+        background: transparent;
+        border: none;
+        color: #fcfbf9;
+        font-size: 1rem;
+        outline: none;
+    }
+    .search-input::placeholder {
+        color: #777;
+    }
+    .search-button {
+        background-color: transparent;
+        color: var(--gold);
+        border: none;
+        padding: 0 25px;
+        font-size: 1.2rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    .search-button:hover {
+        color: #fff;
+    }
+
     /* 3 Sütunlu Ürün Izgarası (Grid) */
     .product-grid {
         display: grid;
@@ -233,6 +277,14 @@
         .whatsapp-info-text {
             font-size: 0.8rem !important;
         }
+        
+        .search-container {
+            padding: 0 10px;
+        }
+        .search-input {
+            padding: 10px 15px;
+            font-size: 0.9rem;
+        }
 
         /* 3 Sütunlu Ürün Izgarası (Grid) */
         .product-grid {
@@ -314,21 +366,45 @@
 <!-- Ürün Vitrini -->
 <div class="collection-wrapper">
     <div class="container">
-        <h2 class="text-center mb-5 fw-bold" style="color: #ffffff; font-family: 'Cormorant Garamond', serif; font-size: 2.8rem; letter-spacing: 2px;">Koleksiyonumuz</h2>
+        <h2 class="text-center mb-4 fw-bold" style="color: #ffffff; font-family: 'Cormorant Garamond', serif; font-size: 2.8rem; letter-spacing: 2px;">Koleksiyonumuz</h2>
         
+        <!-- YENİ EKLENEN ARAMA ALANI -->
+        <div class="search-container">
+            <form action="{% url 'perfume_list' %}" method="GET" class="search-form">
+                <input type="text" name="q" placeholder="Parfüm adı, marka veya nota (örn: vanilya)..." 
+                       value="{{ request.GET.q }}" class="search-input">
+                <!-- Eğer aktif bir kategori varsa, arama yaparken kategoriyi kaybetmemek için gizli input -->
+                {% if active_category %}
+                <input type="hidden" name="category" value="{{ active_category }}">
+                {% endif %}
+                <button type="submit" class="search-button" aria-label="Ara">
+                    <i class="fas fa-search"></i>
+                </button>
+            </form>
+            
+            <!-- Arama sonuç uyarısı -->
+            {% if request.GET.q %}
+            <p class="text-center mt-3" style="color: var(--gold); font-size: 1.1rem;">
+                "<strong>{{ request.GET.q }}</strong>" için arama sonuçları gösteriliyor.
+                <a href="{% url 'perfume_list' %}{% if active_category %}?category={{ active_category }}{% endif %}" class="text-decoration-none ms-2" style="color: #b0b0b0; font-size: 0.9rem;">(Aramayı Temizle)</a>
+            </p>
+            {% endif %}
+        </div>
+        <!-- ARAMA ALANI BİTİŞİ -->
+
         <!-- Kategori Filtreleme Menüsü -->
         <div class="d-flex justify-content-center mb-5">
             <ul class="nav nav-pills gap-3 justify-content-center">
                 <li class="nav-item">
                     <a class="nav-link {% if not active_category %}active{% endif %}"
-                        href="{% url 'perfume_list' %}">
+                        href="{% url 'perfume_list' %}{% if request.GET.q %}?q={{ request.GET.q }}{% endif %}">
                         Tümü
                     </a>
                 </li>
                 {% for category in categories %}
                 <li class="nav-item">
                     <a class="nav-link {% if active_category == category.slug %}active{% endif %}"
-                        href="?category={{ category.slug }}">
+                        href="?category={{ category.slug }}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">
                         {{ category.name }}
                     </a>
                 </li>
@@ -361,7 +437,7 @@
             </div>
             {% empty %}
             <div class="col-12 text-center mt-5" style="grid-column: 1 / -1;">
-                <p class="text-muted fs-5"><i class="fas fa-box-open me-2"></i>Bu kategoride henüz ürün bulunmamaktadır.</p>
+                <p class="text-muted fs-5"><i class="fas fa-search me-2"></i>Arama kriterlerinize uygun parfüm bulunamadı.</p>
             </div>
             {% endfor %}
         </div>
@@ -373,7 +449,7 @@
                 
                 {% if perfumes.has_previous %}
                     <li class="page-item">
-                        <a class="page-link" href="?page={{ perfumes.previous_page_number }}{% if active_category %}&category={{ active_category }}{% endif %}">&laquo; Önceki</a>
+                        <a class="page-link" href="?page={{ perfumes.previous_page_number }}{% if active_category %}&category={{ active_category }}{% endif %}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">&laquo; Önceki</a>
                     </li>
                 {% else %}
                     <li class="page-item disabled">
@@ -385,13 +461,13 @@
                     {% if perfumes.number == num %}
                         <li class="page-item active"><span class="page-link">{{ num }}</span></li>
                     {% elif num > perfumes.number|add:'-3' and num < perfumes.number|add:'3' %}
-                        <li class="page-item"><a class="page-link" href="?page={{ num }}{% if active_category %}&category={{ active_category }}{% endif %}">{{ num }}</a></li>
+                        <li class="page-item"><a class="page-link" href="?page={{ num }}{% if active_category %}&category={{ active_category }}{% endif %}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">{{ num }}</a></li>
                     {% endif %}
                 {% endfor %}
 
                 {% if perfumes.has_next %}
                     <li class="page-item">
-                        <a class="page-link" href="?page={{ perfumes.next_page_number }}{% if active_category %}&category={{ active_category }}{% endif %}">Sonraki &raquo;</a>
+                        <a class="page-link" href="?page={{ perfumes.next_page_number }}{% if active_category %}&category={{ active_category }}{% endif %}{% if request.GET.q %}&q={{ request.GET.q }}{% endif %}">Sonraki &raquo;</a>
                     </li>
                 {% else %}
                     <li class="page-item disabled">

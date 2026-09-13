@@ -71,18 +71,64 @@
             white-space: nowrap;
         }
 
+        /* --- NAVBAR ARAMA ÇUBUĞU --- */
+        .navbar-search {
+            position: relative;
+            width: 320px;
+        }
+        .navbar-search input {
+            width: 100%;
+            padding: 10px 45px 10px 20px;
+            border-radius: 50px;
+            border: 1px solid rgba(181, 149, 92, 0.4);
+            background-color: var(--light-bg);
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+            color: var(--text-main);
+        }
+        .navbar-search input:focus {
+            border-color: var(--gold);
+            outline: none;
+            box-shadow: 0 0 10px rgba(181, 149, 92, 0.15);
+            background-color: #ffffff;
+        }
+        .navbar-search button {
+            position: absolute;
+            right: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: transparent;
+            border: none;
+            color: var(--gold);
+            padding: 5px 15px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: color 0.3s;
+        }
+        .navbar-search button:hover {
+            color: var(--gold-dark);
+        }
+
         /* Mobilde Navbar ve Başlık Optimizasyonu */
         @media (max-width: 768px) {
             .navbar {
-                padding: 8px 0;
+                padding: 12px 0;
+            }
+            .navbar .container {
+                flex-direction: column;
+                gap: 15px;
             }
             .navbar-logo {
-                height: 38px !important;
-                margin-right: 6px !important;
+                height: 45px !important;
+                margin-right: 8px !important;
             }
             .brand-title {
-                font-size: 1rem !important;
-                letter-spacing: 0.5px !important;
+                font-size: 1.4rem !important;
+                letter-spacing: 1px !important;
+            }
+            .navbar-search {
+                width: 100%;
+                max-width: 400px;
             }
         }
 
@@ -145,11 +191,22 @@
 
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg sticky-top">
-    <div class="container d-flex justify-content-center">
+    <div class="container d-flex justify-content-between align-items-center flex-wrap">
+        <!-- Logo ve Marka -->
         <a class="brand-container" href="/">
             <img src="{% static 'logo.png' %}" alt="Santal Logo" class="navbar-logo">
             <span class="brand-title">SANTALFRAGRANCE</span>
         </a>
+        
+        <!-- Arama Çubuğu -->
+        <div class="navbar-search">
+            <form action="/" method="GET" class="m-0">
+                <input type="text" name="q" placeholder="Koleksiyonda ara (örn: vanilya)..." value="{{ request.GET.q }}">
+                <button type="submit" aria-label="Ara">
+                    <i class="fas fa-search"></i>
+                </button>
+            </form>
+        </div>
     </div>
 </nav>
 
